@@ -5,7 +5,7 @@ import numpy
 
 df = pd.read_csv('fc1.csv', index_col= "LoggedAt")
 
-
+ 
 
 def test_get_fault_count():
     x  = VobcFault.get_row_count(df) 
