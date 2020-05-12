@@ -3,6 +3,9 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.offline as pyo
+import plotly.express as px
+import plotly.graph_objs as go
 
 
 coltouse = ["Fault Code", 
@@ -24,16 +27,18 @@ labels_font = {'family': 'consolas',
         }
 
 
-def import_data(datasource, col_used):
-    df = pd.read_csv(datasource, index_col= "LoggedAt",  usecols= col_used)
-    return df
-
-
-def sort_and_short(df, rtn_amt):
-    df = df.groupby(["VOBCID", "LocationName"]).size()
-    df = df.to_frame(name = 'FaultCount').reset_index()
-    df = df.nlargest(rtn_amt,"FaultCount") 
-    return df
+def generate_scatter(df, datax, datay, text_field, FaultCount, size_scale):
+    data = go.Scatter( x = datax, 
+                y = datay,
+                text = df[text_field],
+                mode = "markers", 
+                marker=dict(
+                    size=FaultCount/max(FaultCount) *size_scale,
+                    color=FaultCount, 
+                    colorscale='Viridis',
+                    sizemode = 'area', 
+                    showscale=True))
+    return data
 
 
 def generate_graph(df, labels_font, title_font):
@@ -46,7 +51,18 @@ def generate_graph(df, labels_font, title_font):
     plt.show()
 
 
-if __name__ == "__main__":
-    df = import_data("fc1.csv", coltouse)
-    df = sort_and_short(df, 300)
-    generate_graph(df, labels_font, title_font)
+# if __name__ == "__main__":
+#     df = import_data("fc1.csv", coltouse)
+#     df = sort_and_short(df, 300)
+#     generate_graph(df, labels_font, title_font)
+
+# def import_data(datasource, col_used):
+#     df = pd.read_csv(datasource, index_col= "LoggedAt",  usecols= col_used)
+#     return df
+
+
+# def sort_and_short(df, rtn_amt):
+#     df = df.groupby(["VOBCID", "LocationName"]).size()
+#     df = df.to_frame(name = 'FaultCount').reset_index()
+#     df = df.nlargest(rtn_amt,"FaultCount") 
+#     return df
