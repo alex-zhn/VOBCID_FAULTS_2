@@ -8,47 +8,52 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 
-coltouse = ["Fault Code", 
-        "FaultName",
-        "LoggedAt",
-        "VOBCID",
-        "LocationName"
-        ]
-title_font = {'family': 'source sans pro',
-        'color':  'darkblue',
-        'weight': 'normal',
-        'size': 20,
-        }
-
-labels_font = {'family': 'consolas',
-        'color':  'darkred',
-        'weight': 'normal',
-        'size': 15,
-        }
-
-
-def generate_scatter(df, datax, datay, text_field, FaultCount, size_scale):
-    data = go.Scatter( x = datax, 
-                y = datay,
-                text = df[text_field],
-                mode = "markers", 
-                marker=dict(
-                    size=FaultCount/max(FaultCount) *size_scale,
-                    color=FaultCount, 
-                    colorscale='Viridis',
-                    sizemode = 'area', 
-                    showscale=True))
+def generate_scatter(df, datax, datay, text_field, bubble_size, size_scale):
+    data = go.Scatter(x = datax, 
+                    y = datay,
+                    text = df[text_field],
+                    mode = "markers", 
+                    marker=dict(
+                        size=bubble_size/max(bubble_size) *size_scale,
+                        color=bubble_size, 
+                        colorscale='Viridis',
+                        sizemode = 'area', 
+                        showscale=True)
+                        )
     return data
 
 
-def generate_graph(df, labels_font, title_font):
-    fig, ax = plt.subplots()
-    df.plot.scatter(ax=ax, x='LocationName', y='VOBCID', c='FaultCount',  colormap='plasma',rot = 90)
-    ax.tick_params(axis='x', which='major', labelsize=5)
-    ax.set_xlabel("Location Name", fontdict = labels_font)
-    ax.set_ylabel("VOBCID", fontdict = labels_font)
-    fig.tight_layout()
-    plt.show()
+
+
+# coltouse = ["Fault Code", 
+#         "FaultName",
+#         "LoggedAt",
+#         "VOBCID",
+#         "LocationName"
+#         ]
+# title_font = {'family': 'source sans pro',
+#         'color':  'darkblue',
+#         'weight': 'normal',
+#         'size': 20,
+#         }
+
+# labels_font = {'family': 'consolas',
+#         'color':  'darkred',
+#         'weight': 'normal',
+#         'size': 15,
+#         }
+
+
+
+
+# def generate_graph(df, labels_font, title_font):
+#     fig, ax = plt.subplots()
+#     df.plot.scatter(ax=ax, x='LocationName', y='VOBCID', c='FaultCount',  colormap='plasma',rot = 90)
+#     ax.tick_params(axis='x', which='major', labelsize=5)
+#     ax.set_xlabel("Location Name", fontdict = labels_font)
+#     ax.set_ylabel("VOBCID", fontdict = labels_font)
+#     fig.tight_layout()
+#     plt.show()
 
 
 # if __name__ == "__main__":

@@ -10,38 +10,48 @@ import plotly.graph_objs as go
 import dash as dash
 import dash_core_components as dcc 
 import dash_html_components as html 
+from datetime import datetime as dt
 
-from order_data import import_data
-from order_data import sort_FaultName_FaultCount
-from order_data import sort_VOBCID_FaultCount
+import order_data
+import dict_gen
+
 
 from Graphs import generate_scatter
 
-def data_gen(df, xfield, yfield, bubble_size):
+def data_gen_fc_as_size(df, xfield, yfield, size_scale):
     datax = df[xfield].tolist()
     datay = df[yfield].tolist()
     FaultCount = df["FaultCount"].tolist()
     FaultCount = np.array(FaultCount)
-    data = generate_scatter(df, datax, datay, "FaultCount", FaultCount, bubble_size)   
+    data = generate_scatter(df, datax, datay, "FaultCount", FaultCount, size_scale)   
     return data
 
 
-df = import_data("fc1.csv")
+df = order_data.import_data("fc1.csv")
 
-df1 = sort_FaultName_FaultCount(df)
-df2 = sort_VOBCID_FaultCount(df, 300)
+df1 = order_data.sort_FaultName_FaultCount(df)
+df2 = order_data.sort_VOBCID_FaultCount(df, 300)
 
-data1 = data_gen(df1,"LocationName", "FaultName", 10000)
-data2 = data_gen(df2,"LocationName", "VOBCID", 5000)
+data1 = data_gen_fc_as_size(df1,"LocationName", "FaultName", 10000)
+data2 = data_gen_fc_as_size(df2,"LocationName", "VOBCID", 5000)
 
 app = dash.Dash()
 
+checkboxdict = dict_gen.dict_gen("FaultName", "Fault Code")
+
 app.layout = html.Div(children = [
-        dcc.Graph(id = 'Scatterplot', 
-        figure = {'data':[data1], 
-        'layout':go.Layout(title = "Faults and Location")
-        }
-        ),
+        
+        html.Div([
+            dcc.Graph(id = 'Scatterplot', 
+            figure = {'data':[data1], 
+            'layout':go.Layout(title = "Faults and Location")}
+            ),    
+
+            dcc.Checklist(
+            options= checkboxdict,
+            value=[])  
+        
+        ]),
        
         dcc.Graph(id = 'Scatterplot2', 
         figure = {'data':[data2], 
