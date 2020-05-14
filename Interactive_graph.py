@@ -51,6 +51,12 @@ app.layout = html.Div([
         ], className = "six columns"),
 
         html.Div([
+            html.Br(),
+            html.Br(),
+            html.Br(),
+            html.Br(),
+            html.Br(),
+            html.Br(),
             dcc.Checklist(
                 id = 'Checklist',
                 options= checkboxdict,
