@@ -7,6 +7,7 @@ import plotly.offline as pyo
 import plotly.express as px
 import plotly.graph_objs as go
 
+import order_data
 
 def generate_scatter_graph(df, datax, datay, text_field, bubble_size, size_scale):
     data = go.Scatter(x = datax, 

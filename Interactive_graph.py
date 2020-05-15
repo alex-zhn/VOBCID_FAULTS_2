@@ -77,8 +77,6 @@ app.layout = html.Div([
 
     ],className="row"),
 
-    
-
 ])
 
 
@@ -102,12 +100,12 @@ def display_click_data(clickData, faultcode_, start_date, end_date):
     if df1 is None:
         pass
 
-    data_1 = [gen_bar(df1, vobcid_, location)]
+    data_1 = [Graphs.gen_bar(df1, vobcid_, location)]
     
     return{'data': data_1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-            'layout' : go.Layout(title = "Faults by time", 
-                xaxis = {'title': 'time'},
-                yaxis = {'title': 'faultcount'}, 
+            'layout' : go.Layout(title = "Faults by Date VOBCID: {} Location: {}".format(vobcid_, location), 
+                xaxis = {'title': 'Date'},
+                yaxis = {'title': 'Faultcount'}, 
                 hovermode="closest")
             }
 
@@ -131,14 +129,16 @@ def update_Scatter(faultcode_,start_date ,end_date):
             'layout' : go.Layout(title = "Faults by VOBCID and LOCATION", 
                 xaxis = {'title': 'Location'},
                 yaxis = {'title': 'VOBCID'}, 
-                hovermode="closest")
+                hovermode="closest",
+                clickmode =  'event+select')
             }
     
-
 
 
 if __name__ == "__main__":
     app.run_server()
   
+
+
 
 
