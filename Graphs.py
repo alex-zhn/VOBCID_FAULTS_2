@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 
-def generate_scatter(df, datax, datay, text_field, bubble_size, size_scale):
+def generate_scatter_graph(df, datax, datay, text_field, bubble_size, size_scale):
     data = go.Scatter(x = datax, 
                     y = datay,
                     text = df[text_field],
@@ -22,8 +22,20 @@ def generate_scatter(df, datax, datay, text_field, bubble_size, size_scale):
                         )
     return data
 
+def generate_scatter(df, xfield, yfield, size_scale):
+    datax = df[xfield].tolist()
+    datay = df[yfield].tolist()
+    FaultCount = df["FaultCount"].tolist()
+    FaultCount = np.array(FaultCount)
+    data = generate_scatter_graph(df, datax, datay, "FaultCount", FaultCount, size_scale)   
+    return data
 
-
+def gen_bar(df, vobcid, loc_name):
+    df = order_data.sort_by_VOBCID_Location(df, vobcid, loc_name)
+    datax = df.index.tolist()
+    datay = df['FaultCount'].tolist()
+    fig = go.Bar(x=datax, y=datay)
+    return fig
 
 
 

@@ -20,24 +20,11 @@ import re
 
 import order_data
 import dict_gen
-
-
-from Graphs import generate_scatter
-
-def data_gen_fc_as_size(df, xfield, yfield, size_scale):
-    datax = df[xfield].tolist()
-    datay = df[yfield].tolist()
-    FaultCount = df["FaultCount"].tolist()
-    FaultCount = np.array(FaultCount)
-    data = generate_scatter(df, datax, datay, "FaultCount", FaultCount, size_scale)   
-    return data
+import Graphs
 
 
 df = order_data.import_data("fc1.csv")
 df.index = pd.to_datetime(df.index)
-
-# df1 = order_data.sort_VOBCID_FaultCount(df, 300, [1,2,3])
-# data1 = data_gen_fc_as_size(df1,"LocationName", "VOBCID", 5000)
 
 
 
@@ -50,8 +37,8 @@ app.layout = html.Div([
     html.Div([    
         html.Div([
             dcc.Graph(id = 'Scatterplot', 
-                style={ 'float': 'left', "display":"block", "height" : "80vh",'width': "75vw"},
-                
+                style={ 'float': 'left', "display":"block", "height" : "60vh",'width': "75vw"},
+            
             ),
         ], className = "six columns"),
 
@@ -78,11 +65,15 @@ app.layout = html.Div([
             max_date_allowed=df.index.max(),
             initial_visible_month=df.index.min(),
             end_date=df.index.max(),
-        )], className = "six columns")
-
+        )], className = "six columns"),
+        
         html.Div([
-            html.Pre(id='click-data', style=styles['pre']),
-        ], className="six columns")
+            dcc.Graph(id = 'BarGraph', 
+                #style={ 'float': 'left', "display":"block", "height" : "35vh",'width': "75vw"},
+                
+            ),
+        ], className = "six columns")
+
 
     ],className="row"),
 
@@ -92,10 +83,33 @@ app.layout = html.Div([
 
 
 @app.callback(
-    Output('click-data', 'children'),
-    [Input('basic-interactions', 'clickData')])
-def display_click_data(clickData):
-    return json.dumps(clickData, indent=2)
+    Output('BarGraph', 'figure'),[
+    Input('Scatterplot', 'clickData'),
+    Input('Checklist', 'value'),
+    Input('date-range', 'start_date'),
+    Input('date-range', 'end_date')])
+def display_click_data(clickData, faultcode_, start_date, end_date):
+    df1 = order_data.sort_Dates(df, start_date, end_date)
+    df1 = df1[df1['Fault Code'].isin(faultcode_)]
+
+    if clickData is None:
+        vobcid_ = 240
+        location = 'GRE-DEB'
+    else:
+        vobcid_= clickData['points'][0]['y']
+        location = clickData['points'][0]['x']
+
+    if df1 is None:
+        pass
+
+    data_1 = [gen_bar(df1, vobcid_, location)]
+    
+    return{'data': data_1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+            'layout' : go.Layout(title = "Faults by time", 
+                xaxis = {'title': 'time'},
+                yaxis = {'title': 'faultcount'}, 
+                hovermode="closest")
+            }
 
 
 @app.callback(Output('Scatterplot', 'figure'),
@@ -104,19 +118,14 @@ def display_click_data(clickData):
                 Input('date-range', 'end_date')])
 def update_Scatter(faultcode_,start_date ,end_date):
     
-    if start_date is not None and end_date is not None:
-        mask = (df.index > start_date) & (df.index <= end_date)
-        df1 = df.loc[mask]
-    else:
-        df1 = df
-
+    df1 = order_data.sort_Dates(df, start_date, end_date)
+    df1 = df1[df1['Fault Code'].isin(faultcode_)]
+    
     if df1 is None:
         pass
 
-    df1 = df1[df1['Fault Code'].isin(faultcode_)] 
-    
     df1 = order_data.sort_VOBCID_FaultCount(df1, 300)
-    data_1 = [data_gen_fc_as_size(df1,"LocationName", "VOBCID", 5000)]          
+    data_1 = [Graphs.generate_scatter(df1,"LocationName", "VOBCID", 5000)]          
     
     return{'data': data_1,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
             'layout' : go.Layout(title = "Faults by VOBCID and LOCATION", 
@@ -130,3 +139,6 @@ def update_Scatter(faultcode_,start_date ,end_date):
 
 if __name__ == "__main__":
     app.run_server()
+  
+
+
