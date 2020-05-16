@@ -3,7 +3,7 @@ import numpy
 import pandas as pd
 
 
-def dict_gen(labels, values):
+def dict_gen_scatterplot1(labels, values):
     df = pd.read_csv("fc1.csv", usecols= [ labels, values] )
     columns_titles = [labels , values]
     df  = df.reindex(columns=columns_titles)

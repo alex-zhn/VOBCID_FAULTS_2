@@ -24,13 +24,10 @@ import Graphs
 
 
 df = order_data.import_data("fc1.csv")
-df.index = pd.to_datetime(df.index)
-
-
+#df.index = pd.to_datetime(df.index)
 
 app = dash.Dash()
-
-checkboxdict = dict_gen.dict_gen("FaultName", "Fault Code")
+checkboxdict = dict_gen.dict_gen_scatterplot1("FaultName", "Fault Code")
 
 
 app.layout = html.Div([

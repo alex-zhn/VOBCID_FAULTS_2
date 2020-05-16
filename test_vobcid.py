@@ -10,27 +10,22 @@ df = pd.read_csv('fc1.csv', index_col= "LoggedAt")
 
  
 
-# def test_get_fault_count():
-#     x  = VobcFault.get_row_count(df) 
-#     assert x is not None
-#     assert x == 389348 
-
-# def test_get_fault_count_by_fault_1():
-#     x = VobcFault.get_row_count_by_fault(df,1)
-#     assert x == 867
-
-# def test_get_fault_count_by_fault_3():
-#     x = VobcFault.get_row_count_by_fault(df,3)
-#     assert x == 292484
-
 # def test_import_data():
-#      x = order_data.import_data("fc1.csv")
-#      assert len(df.index) == len(x.index)
-#      assert df.size == x.size
+#     x = order_data.import_data("fc1.csv")
+#     try: 
+#         order_data.import_data("fc.csv")
+#     except FileNotFoundError:
+#         return
+#     assert len(df.index) == len(x.index)
+#     assert df.size == x.size
 
 # def test_sort_VOBCID_FaultCount():
 #      x = order_data.sort_VOBCID_FaultCount(df, 300)
 #      assert len(x.index) == 300 
+
+# def test_sort_by_VOBCID_Location():
+#     x = order_data.sort_by_VOBCID_Location(df, 240, 'GRE-DEB')
+#     assert x is not None
 
 # def test_sort_VOBCID_FaultCount_1():
 #      x = order_data.sort_VOBCID_FaultCount(df, 3000)

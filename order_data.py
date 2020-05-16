@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 def import_data(datasource):
     df = pd.read_csv(datasource, index_col= "LoggedAt")
+    df.index = pd.to_datetime(df.index)
     return df
 
 def sort_VOBCID_FaultCount(df, rtn_amt):
