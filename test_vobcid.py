@@ -6,7 +6,7 @@ import Interactive_graph
 import pandas as pd
 import numpy
 import plotly
-
+import dict_gen
 
 df = pd.read_csv('fc1.csv', index_col= "LoggedAt")
 df.index = pd.to_datetime(df.index)
@@ -71,7 +71,31 @@ def test_generate_scatter_exceptions():
         assert Graphs.generate_scatter(x,23, "sda", 5000)
 
 def test_gen_bar():
-    pass
+    data =  Graphs.gen_bar(df, 240, 'GRE-DEB')
+    assert data is not None
+    assert isinstance(data, plotly.graph_objs._bar.Bar)
+def test_gen_bar_exceptions():
+    with pytest.raises(Exception):
+        assert Graphs.gen_bar(df, 24777, None)
+    
 
+
+dictionary = [{'label': '01. Passenger Alarm', 'value': 1},
+ {'label': '02. FAR Level 2 Fault', 'value': 2},
+ {'label': '03. FAR Level 3 Fault', 'value': 3},
+ {'label': '04. Failed to Dock', 'value': 4},
+ {'label': '05. Dynamic Brake Failure', 'value': 5},
+ {'label': '06. Converter Failure', 'value': 6},
+ {'label': '07. FAR Level 1 Fault', 'value': 7},
+ {'label': '08. Train Overspeed', 'value': 8},
+ {'label': '09. Target Point Overshoot', 'value': 9},
+ {'label': '10. Rollback', 'value': 10},
+ {'label': '11. V = 0 Failure', 'value': 11},
+ {'label': '12. Obstruction in AUTO Mode', 'value': 12},
+ {'label': '13. EB Test Failure', 'value': 13},
+ {'label': '14. Power Deselect Failure', 'value': 14},
+ {'label': '15.Loss of Door Closed Status', 'value': 15}]
 def test_dict_gen_scatterplot1():
-    pass
+    x = dict_gen.dict_gen_scatterplot1("FaultName", "Fault Code")
+    assert x == dictionary
+    
