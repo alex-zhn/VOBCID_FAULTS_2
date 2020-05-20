@@ -7,7 +7,7 @@ import pandas as pd
 import numpy
 import plotly
 import dict_gen
-from dash.testing.application_runners import import_app
+
 
 df = pd.read_csv('fc1.csv', index_col= "LoggedAt")
 df.index = pd.to_datetime(df.index)
