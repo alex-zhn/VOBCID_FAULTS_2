@@ -103,7 +103,6 @@ def test_dict_gen_scatterplot1():
     with pytest.raises(Exception):
         assert dict_gen.dict_gen_scatterplot1("FaultName", None)
 
-# def test_display_click_data(dash_br):
-#     dash_br.server_url = 'https://dash.plot.ly/testing'
-#     assert dash_br.wait_for_element("h1").text == "Dash Testing"
-#     assert dash_br.get_logs() == [], "browser console should contain no error"
+def test_display_click_data(dash_br):
+    x = ig.display_click_data(None, 5, df.index.min(), df.index.max(), df)
+    x
