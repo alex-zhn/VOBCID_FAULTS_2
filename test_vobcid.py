@@ -2,11 +2,12 @@
 import pytest
 import Graphs
 import order_data
-import Interactive_graph
+import Interactive_graph as ig
 import pandas as pd
 import numpy
 import plotly
 import dict_gen
+from dash.testing.application_runners import import_app
 
 df = pd.read_csv('fc1.csv', index_col= "LoggedAt")
 df.index = pd.to_datetime(df.index)
@@ -45,8 +46,8 @@ def test_sort_by_VOBCID_Location():
 def test_sort_Dates_exceptions():
     with pytest.raises(Exception):
         assert order_data.sort_Dates(df, df.index.max(), df.index.min())
+    with pytest.raises(Exception):
         assert order_data.sort_Dates(df2, None, None)
-        assert order_data.sort_Dates(df3, None, None)
 
 def test_sort_Dates():
     assert len(df) == len(order_data.sort_Dates(df, None, None))
@@ -68,6 +69,7 @@ def test_generate_scatter_exceptions():
     x = order_data.sort_VOBCID_FaultCount(df, 3000)
     with pytest.raises(Exception):
         assert Graphs.generate_scatter(x,None, "s", 5000)
+    with pytest.raises(Exception):
         assert Graphs.generate_scatter(x,23, "sda", 5000)
 
 def test_gen_bar():
@@ -98,4 +100,10 @@ dictionary = [{'label': '01. Passenger Alarm', 'value': 1},
 def test_dict_gen_scatterplot1():
     x = dict_gen.dict_gen_scatterplot1("FaultName", "Fault Code")
     assert x == dictionary
-    
+    with pytest.raises(Exception):
+        assert dict_gen.dict_gen_scatterplot1("FaultName", None)
+
+# def test_display_click_data(dash_br):
+#     dash_br.server_url = 'https://dash.plot.ly/testing'
+#     assert dash_br.wait_for_element("h1").text == "Dash Testing"
+#     assert dash_br.get_logs() == [], "browser console should contain no error"

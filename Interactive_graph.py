@@ -83,7 +83,7 @@ app.layout = html.Div([
     Input('Checklist', 'value'),
     Input('date-range', 'start_date'),
     Input('date-range', 'end_date')])
-def display_click_data(clickData, faultcode_, start_date, end_date):
+def display_click_data(clickData, faultcode_, start_date, end_date, df):
     df1 = order_data.sort_Dates(df, start_date, end_date)
     df1 = df1[df1['Fault Code'].isin(faultcode_)]
 
@@ -111,7 +111,7 @@ def display_click_data(clickData, faultcode_, start_date, end_date):
                 [Input('Checklist', 'value'),
                 Input('date-range', 'start_date'),
                 Input('date-range', 'end_date')])
-def update_Scatter(faultcode_,start_date ,end_date):
+def update_Scatter(faultcode_,start_date ,end_date, df):
     
     df1 = order_data.sort_Dates(df, start_date, end_date)
     df1 = df1[df1['Fault Code'].isin(faultcode_)]
