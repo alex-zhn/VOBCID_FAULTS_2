@@ -103,6 +103,10 @@ def test_dict_gen_scatterplot1():
     with pytest.raises(Exception):
         assert dict_gen.dict_gen_scatterplot1("FaultName", None)
 
-def test_display_click_data(dash_br):
-    x = ig.display_click_data(None, 5, df.index.min(), df.index.max(), df)
-    x
+def test_display_click_data():
+    x = ig._display_click_data(None, [5], df.index.min(), df.index.max(), df)
+    assert x is not None
+   
+def test_update_Scatter():
+    x = ig._update_Scatter([2],df.index.min(),df.index.max(),df)
+    assert x is not None 
